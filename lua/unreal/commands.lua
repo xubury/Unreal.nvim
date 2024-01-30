@@ -678,6 +678,9 @@ function InitializeCurrentGenData()
         CurrentGenData.prjName .. ".uproject\""
 
     local desiredTargetIndex = PromptBuildTargetIndex()
+    if desiredTargetIndex == nil then
+        return false
+    end
 
     CurrentGenData.target = CurrentGenData.config.Targets[desiredTargetIndex]
 

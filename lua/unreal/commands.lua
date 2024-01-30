@@ -681,7 +681,7 @@ function InitializeCurrentGenData()
 
     local desiredTargetIndex = nil
     if CurrentGenData.config.DefaultTarget and CurrentGenData.config.DefaultTarget > 0 then
-        desiredTargetIndex = CurrentGenData.DefaultTarget
+        desiredTargetIndex = CurrentGenData.config.DefaultTarget
     else
         desiredTargetIndex = PromptBuildTargetIndex()
     end

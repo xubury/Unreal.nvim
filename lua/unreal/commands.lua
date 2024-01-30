@@ -183,6 +183,7 @@ function Commands._CreateConfigFile(configFilePath, projectName)
     "version" : "0.0.2",
     "_comment": "dont forget to escape backslashes in EnginePath",
     "EngineDir": "",
+    "DefaultTarget": 0,
     "Targets":  [
 
         {
@@ -676,8 +677,15 @@ function InitializeCurrentGenData()
     CurrentGenData.ueBuildBat = "\"" .. CurrentGenData.config.EngineDir .."/Engine/Build/BatchFiles/Build.bat\""
     CurrentGenData.projectPath = "\"" .. CurrentGenData.prjDir .. "/" ..
         CurrentGenData.prjName .. ".uproject\""
+        
 
-    local desiredTargetIndex = PromptBuildTargetIndex()
+    local desiredTargetIndex = nil
+    if CurrentGenData.config.DefaultTarget and CurrentGenData.config.DefaultTarget > 0 then
+        desiredTargetIndex = CurrentGenData.DefaultTarget
+    else
+        desiredTargetIndex = PromptBuildTargetIndex()
+    end
+
     if desiredTargetIndex == nil then
         return false
     end

@@ -321,7 +321,7 @@ function ExtractRSP(rsppath)
     local extraIncludes = {
         "Engine/Source/Runtime/CoreUObject/Public/UObject/ObjectMacros.h",
         "Engine/Source/Runtime/Core/Public/Misc/EnumRange.h",
-        "Engine/Source/Runtime/Engine/Public/Engine.h"
+        "Engine/Source/Runtime/Engine/Public/EngineMinimal.h"
     }
 
     rsppath = rsppath:gsub("\\\\","/")

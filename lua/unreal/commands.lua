@@ -183,6 +183,7 @@ function Commands._CreateConfigFile(configFilePath, projectName)
     "version" : "0.0.2",
     "_comment": "dont forget to escape backslashes in EnginePath",
     "EngineDir": "",
+    "EngineVer": 5.0,
     "DefaultTarget": 0,
     "Targets":  [
 
@@ -321,7 +322,7 @@ function ExtractRSP(rsppath)
     local extraIncludes = {
         "Engine/Source/Runtime/CoreUObject/Public/UObject/ObjectMacros.h",
         "Engine/Source/Runtime/Core/Public/Misc/EnumRange.h",
-        "Engine/Source/Runtime/Engine/Public/EngineMinimal.h"
+        "Engine/Source/Runtime/Engine/Public/EngineMinimal.h",
     }
 
     rsppath = rsppath:gsub("\\\\","/")
@@ -541,8 +542,8 @@ function Stage_UbtGenCmd()
                 end
                 coroutine.yield()
 
-                table.insert(contentLines, "\t\t\"command\": \"clang++.exe @\\\"" .. EscapePath(rspfilepath) .."\\\""
-                    .. " ".. EscapePath(currentFilename) .."\",\n")
+                table.insert(contentLines, string.format("\t\t\"command\": %s @\\\"" .. EscapePath(rspfilepath) .."\\\""
+                .. " ".. EscapePath(currentFilename) .."\",\n", command))
             end
         else
             local fbegin, fend = line:find("\"file\": ")
@@ -673,7 +674,11 @@ function InitializeCurrentGenData()
         return false
     end
 
-    CurrentGenData.ubtPath = "\"" .. CurrentGenData.config.EngineDir .."/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe\""
+    if CurrentGenData.config.EngineVer and CurrentGenData.config.EngineVer < 5.0 then
+        CurrentGenData.ubtPath = "\"" .. CurrentGenData.config.EngineDir .."/Engine/Binaries/DotNET/UnrealBuildTool.exe\""
+    else
+        CurrentGenData.ubtPath = "\"" .. CurrentGenData.config.EngineDir .."/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe\""
+    end
     CurrentGenData.ueBuildBat = "\"" .. CurrentGenData.config.EngineDir .."/Engine/Build/BatchFiles/Build.bat\""
     CurrentGenData.projectPath = "\"" .. CurrentGenData.prjDir .. "/" ..
         CurrentGenData.prjName .. ".uproject\""

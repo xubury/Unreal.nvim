@@ -187,7 +187,7 @@ function Commands._CreateConfigFile(configFilePath, projectName)
     "Targets":  [
 
         {
-            "TargetName" : "]] .. projectName .. [[-Editor",
+            "TargetName" : "]] .. projectName .. [[",
             "Configuration" : "DebugGame",
             "withEditor" : true,
             "UbtExtraFlags" : "",
@@ -201,7 +201,7 @@ function Commands._CreateConfigFile(configFilePath, projectName)
             "PlatformName" : "Win64"
         },
         {
-            "TargetName" : "]] .. projectName .. [[-Editor",
+            "TargetName" : "]] .. projectName .. [[",
             "Configuration" : "Development",
             "withEditor" : true,
             "UbtExtraFlags" : "",
@@ -215,7 +215,7 @@ function Commands._CreateConfigFile(configFilePath, projectName)
             "PlatformName" : "Win64"
         },
         {
-            "TargetName" : "]] .. projectName .. [[-Editor",
+            "TargetName" : "]] .. projectName .. [[",
             "Configuration" : "Shipping",
             "withEditor" : true,
             "UbtExtraFlags" : "",
@@ -575,7 +575,7 @@ function Stage_UbtGenCmd()
 
     local cmd = CurrentGenData.ubtPath .. " -project=" ..
         CurrentGenData.projectPath .. " " .. CurrentGenData.target.UbtExtraFlags .. " " ..
-        CurrentGenData.prjName .. CurrentGenData.targetNameSuffix .. " " .. CurrentGenData.target.Configuration .. " " ..
+        CurrentGenData.target.TargetName .. CurrentGenData.targetNameSuffix .. " " .. CurrentGenData.target.Configuration .. " " ..
         CurrentGenData.target.PlatformName .. " -headers"
 
     vim.cmd("compiler msvc")
@@ -736,7 +736,7 @@ function Commands.BuildCoroutine()
             callback = BuildComplete
         })
 
-    local cmd = CurrentGenData.ueBuildBat .. " " .. CurrentGenData.prjName ..
+    local cmd = CurrentGenData.ueBuildBat .. " " .. CurrentGenData.target.TargetName ..
         CurrentGenData.targetNameSuffix .. " " ..
         CurrentGenData.target.PlatformName  .. " " ..
         CurrentGenData.target.Configuration .. " " ..
@@ -949,7 +949,7 @@ function Commands.generateCommandsCoroutine()
     local cmd = CurrentGenData.ubtPath .. " -mode=GenerateClangDatabase -project=" ..
     CurrentGenData.projectPath .. " -game -engine " .. CurrentGenData.target.UbtExtraFlags .. " " ..
     editorFlag .. " " ..
-    CurrentGenData.prjName .. CurrentGenData.targetNameSuffix .. " " .. CurrentGenData.target.Configuration .. " " ..
+    CurrentGenData.target.TargetName .. CurrentGenData.targetNameSuffix .. " " .. CurrentGenData.target.Configuration .. " " ..
     CurrentGenData.target.PlatformName
 
     PrintAndLogMessage("Dispatching command:")
@@ -976,7 +976,7 @@ function Commands._check_extension_in_directory(directory, extension)
         return nil
     end
 
-    handle = vim.loop.fs_scandir(directory)
+    local handle = vim.loop.fs_scandir(directory)
     local name, typ
 
     while handle do
